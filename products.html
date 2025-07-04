@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Products | Envy Wheel Hubs</title>
+
+  <link rel="icon" href="images/Logo and branding/envy-favicon.jpg" />
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Google Fonts: Montserrat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet" />
+</head>
+
+<body>
+  <a id="top"></a>
+
+  <nav class="site-nav">
+    <ul class="nav-list">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="products.html" class="active">Products</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <label class="theme-switch">
+      <input type="checkbox" id="themeToggle">
+      <span class="slider"></span>
+  </nav>
+
+  <header class="site-header">
+    <img src="images/Logo and branding/envy-by-metrics-logo.png" alt="Envy by Metrics Logo" class="logo" />
+  </header>
+
+  <main>
+    <section>
+      <h1>Our Product Range</h1>
+      <div class="product-grid">
+
+        <div class="product-card">
+          <a href="#" class="product-image-link" data-large="images/product-page/envy-purple-hub.jpg">
+            <img src="images/product-page/envy-purple-hub.jpg" alt="Purple Hub" />
+          </a>
+          <h2>Purple Hub</h2>
+          <p>Our flagship anodised purple hub built into a 32-spoke rim.</p>
+        </div>
+
+        <div class="product-card">
+          <a href="#" class="product-image-link" data-large="images/product-page/envy-hub-blue.jpg">
+            <img src="images/product-page/envy-hub-blue.jpg" alt="Blue Hub" />
+          </a>
+          <h2>Blue Hub</h2>
+          <p>Sleek performance hub with high-contrast deep blue finish.</p>
+        </div>
+
+        <div class="product-card">
+          <a href="#" class="product-image-link" data-large="images/product-page/envy-hub-red.jpg">
+            <img src="images/product-page/envy-hub-red.jpg" alt="Red Hub" />
+          </a>
+          <h2>Red Hub</h2>
+          <p>A bold CNC-cut hub in performance red — lightweight & durable.</p>
+        </div>
+
+        <div class="product-card">
+          <a href="#" class="product-image-link" data-large="images/product-page/envy-hub-silver.jpg">
+            <img src="images/product-page/envy-hub-silver.jpg" alt="Silver Hub" />
+          </a>
+          <h2>Silver Hub</h2>
+          <p>Raw finish with minimal branding — a clean, classic look.</p>
+        </div>
+
+        <div class="product-card">
+          <a href="#" class="product-image-link" data-large="images/product-page/envy-hub-titan.jpg">
+            <img src="images/product-page/envy-hub-titan.jpg" alt="Titan Hub" />
+          </a>
+          <h2>Titan Hub</h2>
+          <p>Built to endure — high-load testing for mountain riding.</p>
+        </div>
+
+        <div class="product-card">
+          <a href="#" class="product-image-link" data-large="images/product-page/envy-hubs-in-flowers.jpg">
+            <img src="images/product-page/envy-hubs-in-flowers.jpg" alt="Hubs in Flowers" />
+          </a>
+          <h2>Hubs in Flowers</h2>
+          <p>Artful showcase of Envy hubs — for show bikes and studio builds.</p>
+        </div>
+
+        <div class="product-card">
+          <a href="#" class="product-image-link" data-large="images/product-page/envy-built-wheels.jpg">
+            <img src="images/product-page/envy-built-wheels.jpg" alt="Built Wheels" />
+          </a>
+          <h2>Built Wheels</h2>
+          <p>Pre-built with your hub of choice, ready to ride straight out of the box.</p>
+        </div>
+
+        <div class="product-card">
+          <a href="#" class="product-image-link" data-large="images/product-page/envy-fork-extension-kit.png">
+            <img src="images/product-page/envy-fork-extension-kit.png" alt="Fork Extension Kit" />
+          </a>
+          <h2>Fork Extension Kit</h2>
+          <p>Retrofit kit to adapt older forks for Envy hub compatibility.</p>
+        </div>
+
+        <div class="product-card">
+          <a href="#" class="product-image-link" data-large="images/product-page/envy-atomic-yellow-hubs.jpg">
+            <img src="images/product-page/envy-atomic-yellow-hubs.jpg" alt="Atomic Yellow Hubs" />
+          </a>
+          <h2>Atomic Yellow Hubs</h2>
+          <p>Bright yellow finish with a custom machined edge. Stand out on the track.</p>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+
+  <section class="background-slice">
+    <!-- Optional background image section -->
+  </section>
+
+  <div class="back-to-top" id="backToTop">
+    <a href="#top">Back to Top ↑</a>
+  </div>
+
+  <footer>
+    &copy; <span id="footerYear"></span> Metrics Engineering Co Ltd
+  </footer>
+
+  <script src="js/script.js" defer></script>
+  <script>
+    document.getElementById("footerYear").textContent = new Date().getFullYear();
+  </script>
+
+  <!-- Modal HTML remains after footer -->
+  <div id="image-modal" class="modal">
+    <span class="close">&times;</span>
+    <img class="modal-content" id="modal-img" alt="Expanded product" />
+    <p id="modal-caption" class="modal-caption"></p> <!-- Must be here -->
+  </div>
+
+
+</body>
+
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About | Envy Wheel Hubs</title>
+
+  <link rel="icon" href="images/Logo and branding/envy-favicon.jpg" />
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Google Fonts: Montserrat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet" />
+</head>
+
+<body>
+  <a id="top"></a>
+
+  <nav class="site-nav">
+    <ul class="nav-list">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html" class="active">About</a></li>
+      <li><a href="products.html">Products</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <label class="theme-switch">
+      <input type="checkbox" id="themeToggle">
+      <span class="slider"></span>
+  </nav>
+
+  <header class="site-header">
+    <img src="images/Logo and branding/envy-by-metrics-logo.png" alt="Envy by Metrics Logo" class="logo" />
+  </header>
+
+  <main>
+    <section>
+      <h1>About Envy Wheel Hubs</h1>
+      <img src="images/carousel/envy-team-photo.jpg" alt="The Envy team" class="about-photo" />
+      <p>
+        Envy by Metrics is a UK-based performance wheel hub brand focused on engineering precision, durability,
+        and sleek design for cycling enthusiasts.
+      </p>
+      <p>
+        Born from a passion for quality materials and high-spec CNC manufacturing, our hubs are built to handle
+        whatever your ride throws at them — from muddy trails to urban streets.
+      </p>
+    </section>
+
+    <section>
+      <h2>Our Mission</h2>
+      <blockquote>
+        <p>"Design with purpose. Engineer with obsession. Ride with confidence."</p>
+        <footer>— The Envy Engineering Team</footer>
+      </blockquote>
+    </section>
+
+    <section>
+      <h2>Why Choose Envy?</h2>
+      <ul>
+        <li>Lightweight aerospace-grade materials</li>
+        <li>Extensive field and fatigue testing</li>
+        <li>Customisable colours and axle options</li>
+        <li>Precision-sealed bearings</li>
+      </ul>
+    </section>
+  </main>
+
+  <section class="background-slice">
+    <!-- Optional: image section filler or visual break -->
+  </section>
+
+  <div class="back-to-top" id="backToTop">
+    <a href="#top">Back to Top ↑</a>
+  </div>
+
+  <footer>
+    &copy; <span id="footerYear"></span> Metrics Engineering Co Ltd
+  </footer>
+
+  <script src="js/script.js"></script>
+  <script>
+    document.getElementById("footerYear").textContent = new Date().getFullYear();
+  </script>
+</body>
+
+</html>
