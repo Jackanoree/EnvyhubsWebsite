@@ -1,0 +1,6 @@
+Shift + R-click > Open in powershell
+
+Paste in:
+Get-ChildItem -Name > filenames.txt
+
+Look at new text file for names 
