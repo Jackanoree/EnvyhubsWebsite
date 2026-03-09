@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // ---------------------------------------
-  // Product Modal Logic
+  // Modal Logic
   // ---------------------------------------
   const modal = document.getElementById("image-modal");
   const modalImg = document.getElementById("modal-img");
@@ -76,19 +76,16 @@ document.addEventListener("DOMContentLoaded", function () {
   const prevBtn = document.getElementById("prevBtn");
   const nextBtn = document.getElementById("nextBtn");
 
-  let currentIndex = -1;
-  let currentGalleryLinks = [];
+  let currentStaticLinks = [];
+  let currentStaticIndex = -1;
 
-  function getGalleryLinksForLink(link) {
-    const gallery = link.closest(".product-grid");
-    if (!gallery) {
-      return [];
-    }
+  let currentDynamicImages = [];
+  let currentDynamicIndex = -1;
+  let currentDynamicTitle = "";
+  let currentDynamicDescription = "";
+  let currentModalMode = "";
 
-    return Array.from(gallery.querySelectorAll(".product-image-link"));
-  }
-
-  function openModal(index, galleryLinks) {
+  function openStaticModal(index, galleryLinks) {
     if (!galleryLinks || !galleryLinks[index]) {
       return;
     }
@@ -116,8 +113,48 @@ document.addEventListener("DOMContentLoaded", function () {
       priceBox.textContent = link.dataset.price || "";
     }
 
-    currentGalleryLinks = galleryLinks;
-    currentIndex = index;
+    currentModalMode = "static";
+    currentStaticLinks = galleryLinks;
+    currentStaticIndex = index;
+    currentDynamicImages = [];
+    currentDynamicIndex = -1;
+  }
+
+  function openDynamicModal(imageIndex, images, title, description) {
+    if (!images || !images[imageIndex]) {
+      return;
+    }
+
+    if (!modal || !modalImg) {
+      return;
+    }
+
+    const imageObj = images[imageIndex];
+
+    modal.style.display = "flex";
+    modalImg.src = imageObj.url;
+    modalImg.alt = title || "";
+
+    if (titleBox) {
+      titleBox.textContent = title || "";
+    }
+
+    if (descBox) {
+      let typeLabel = imageObj.type ? "Image type: " + imageObj.type : "";
+      descBox.textContent = description || typeLabel;
+    }
+
+    if (priceBox) {
+      priceBox.textContent = "";
+    }
+
+    currentModalMode = "dynamic";
+    currentDynamicImages = images;
+    currentDynamicIndex = imageIndex;
+    currentDynamicTitle = title || "";
+    currentDynamicDescription = description || "";
+    currentStaticLinks = [];
+    currentStaticIndex = -1;
   }
 
   function closeModal() {
@@ -141,39 +178,65 @@ document.addEventListener("DOMContentLoaded", function () {
       priceBox.textContent = "";
     }
 
-    currentIndex = -1;
-    currentGalleryLinks = [];
+    currentStaticLinks = [];
+    currentStaticIndex = -1;
+    currentDynamicImages = [];
+    currentDynamicIndex = -1;
+    currentDynamicTitle = "";
+    currentDynamicDescription = "";
+    currentModalMode = "";
   }
 
   function showPrev() {
-    if (currentIndex > 0) {
-      openModal(currentIndex - 1, currentGalleryLinks);
+    if (currentModalMode === "static") {
+      if (currentStaticIndex > 0) {
+        openStaticModal(currentStaticIndex - 1, currentStaticLinks);
+      }
+      return;
+    }
+
+    if (currentModalMode === "dynamic") {
+      if (currentDynamicIndex > 0) {
+        openDynamicModal(
+          currentDynamicIndex - 1,
+          currentDynamicImages,
+          currentDynamicTitle,
+          currentDynamicDescription
+        );
+      }
     }
   }
 
   function showNext() {
-    if (currentIndex < currentGalleryLinks.length - 1) {
-      openModal(currentIndex + 1, currentGalleryLinks);
-    }
-  }
-
-  // Event delegation so it works for both static cards and JS-built rim cards
-  document.addEventListener("click", function (e) {
-    const link = e.target.closest(".product-image-link");
-
-    if (!link) {
+    if (currentModalMode === "static") {
+      if (currentStaticIndex < currentStaticLinks.length - 1) {
+        openStaticModal(currentStaticIndex + 1, currentStaticLinks);
+      }
       return;
     }
 
-    e.preventDefault();
-
-    const galleryLinks = getGalleryLinksForLink(link);
-    const index = galleryLinks.indexOf(link);
-
-    if (index !== -1) {
-      openModal(index, galleryLinks);
+    if (currentModalMode === "dynamic") {
+      if (currentDynamicIndex < currentDynamicImages.length - 1) {
+        openDynamicModal(
+          currentDynamicIndex + 1,
+          currentDynamicImages,
+          currentDynamicTitle,
+          currentDynamicDescription
+        );
+      }
     }
-  });
+  }
+
+  function getGalleryLinksForLink(link) {
+    const gallery = link.closest(".product-grid");
+    if (!gallery) {
+      return [];
+    }
+
+    return Array.from(gallery.querySelectorAll(".product-image-link")).filter(function (item) {
+      return !item.dataset.sku;
+    });
+  }
 
   closeBtn?.addEventListener("click", closeModal);
 
@@ -267,21 +330,28 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // ---------------------------------------
-  // Rims: CSV-driven gallery
+  // Rims: CSV-driven product cards grouped by image set
   // ---------------------------------------
   const rimColourSelect = document.getElementById("rimColour");
   const rimStatus = document.getElementById("rimStatus");
   const rimGallery = document.getElementById("rimGallery");
 
-  // CHANGE THESE PATHS if your CSVs live somewhere else
   const rimCsvFiles = {
-    black: "assets/images/products/rims/black/black_rims_image_mapping.csv",
-    blue: "assets/images/products/rims/blue/blue_rims_image_mapping.csv",
-    gold: "assets/images/products/rims/gold/gold_rims_image_mapping.csv",
-    silver: "assets/images/products/rims/silver/silver_rims_image_mapping.csv"
+    black: "data/products/black_rims_image_mapping.csv",
+    blue: "data/products/blue_rims_image_mapping.csv",
+    gold: "data/products/gold_rims_image_mapping.csv",
+    silver: "data/products/silver_rims_image_mapping.csv"
+  };
+
+  const rimImageFolders = {
+    black: "assets/images/rims/black-did-mx-sets",
+    blue: "assets/images/rims/blue-did-mx-sets",
+    gold: "assets/images/rims/gold-did-mx-sets",
+    silver: "assets/images/rims/silver-did-mx-sets"
   };
 
   const rimCache = {};
+  let currentRimProducts = {};
 
   function setRimStatus(message) {
     if (rimStatus) {
@@ -295,114 +365,256 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  function looksLikeImagePath(value) {
-    if (!value) {
-      return false;
-    }
-
-    const trimmed = value.trim().toLowerCase();
-
-    return (
-      trimmed.startsWith("http://") ||
-      trimmed.startsWith("https://") ||
-      trimmed.startsWith("images/") ||
-      trimmed.startsWith("assets/") ||
-      trimmed.startsWith("./") ||
-      trimmed.endsWith(".jpg") ||
-      trimmed.endsWith(".jpeg") ||
-      trimmed.endsWith(".png") ||
-      trimmed.endsWith(".webp") ||
-      trimmed.endsWith(".gif")
-    );
-  }
-
-  function parseCsvLine(line) {
-    const result = [];
-    let current = "";
+  function splitCsvLine(line) {
+    const out = [];
+    let cur = "";
     let inQuotes = false;
 
     for (let i = 0; i < line.length; i++) {
-      const char = line[i];
-      const nextChar = line[i + 1];
+      const ch = line[i];
 
-      if (char === '"') {
-        if (inQuotes && nextChar === '"') {
-          current += '"';
-          i++;
-        } else {
-          inQuotes = !inQuotes;
-        }
-      } else if (char === "," && !inQuotes) {
-        result.push(current);
-        current = "";
-      } else {
-        current += char;
+      if (ch === '"' && line[i + 1] === '"') {
+        cur += '"';
+        i++;
+        continue;
       }
+
+      if (ch === '"') {
+        inQuotes = !inQuotes;
+        continue;
+      }
+
+      if (ch === "," && !inQuotes) {
+        out.push(cur.trim());
+        cur = "";
+        continue;
+      }
+
+      cur += ch;
     }
 
-    result.push(current);
-    return result;
+    out.push(cur.trim());
+    return out;
   }
 
-  function parseCsv(text) {
+  function parseCsvToRows(text) {
     const lines = text
       .split(/\r?\n/)
-      .map(function (line) {
-        return line.trim();
-      })
       .filter(function (line) {
-        return line !== "";
+        return line.trim() !== "";
       });
 
-    return lines.map(parseCsvLine);
-  }
+    if (lines.length < 2) {
+      return [];
+    }
 
-  function extractImagesFromCsvText(csvText) {
-    const rows = parseCsv(csvText);
-    const imageSet = new Set();
-
-    rows.forEach(function (row) {
-      row.forEach(function (cell) {
-        const value = String(cell || "").trim();
-
-        if (looksLikeImagePath(value)) {
-          imageSet.add(value);
-        }
-      });
+    const headers = splitCsvLine(lines[0]).map(function (header) {
+      return String(header || "").replace(/^\uFEFF/, "").trim();
     });
 
-    return Array.from(imageSet);
+    const rows = [];
+
+    for (let i = 1; i < lines.length; i++) {
+      const values = splitCsvLine(lines[i]);
+
+      if (values.length < headers.length) {
+        continue;
+      }
+
+      const row = {};
+
+      for (let h = 0; h < headers.length; h++) {
+        row[headers[h]] = values[h] || "";
+      }
+
+      rows.push(row);
+    }
+
+    return rows;
   }
 
-  function makeNiceColourName(colourValue) {
-    if (!colourValue) {
+  function getImageTypeFromFilename(filename) {
+    const upper = String(filename || "").toUpperCase();
+
+    if (upper.includes("PAIR")) return "PAIR";
+    if (upper.includes("HERO")) return "HERO";
+    if (upper.includes("FRONT")) return "FRONT";
+    if (upper.includes("REAR")) return "REAR";
+
+    return "OTHER";
+  }
+
+  function getImageSortWeight(type) {
+    if (type === "PAIR") return 1;
+    if (type === "HERO") return 2;
+    if (type === "FRONT") return 3;
+    if (type === "REAR") return 4;
+    return 5;
+  }
+
+  function normaliseImageUrl(row, colourValue) {
+    const localFilename = String(row["Local Filename"] || "").trim();
+    const folder = rimImageFolders[colourValue] || "";
+
+    if (!localFilename || !folder) {
       return "";
     }
 
-    return colourValue.charAt(0).toUpperCase() + colourValue.slice(1);
+    return folder + "/" + localFilename;
   }
 
-  function buildRimCard(imageSrc, colourName, imageNumber) {
+  function getComboKeyFromFilename(filename, colourValue) {
+    const name = String(filename || "").trim();
+
+    if (!name) {
+      return "";
+    }
+
+    let cleaned = name
+      .replace(/\.(jpg|jpeg|png|webp|gif)$/i, "")
+      .replace(/^ENVY[-_]/i, "")
+      .replace(/^Envy[-_]/i, "")
+      .replace(/^DID[-_]/i, "")
+      .replace(/^DID/i, "")
+      .replace(/^[-_]+/, "")
+      .replace(/[-_](PAIR|FRONT|REAR|HERO).*$/i, "")
+      .replace(/[()]/g, "")
+      .replace(/\s+/g, "_");
+
+    cleaned = cleaned.replace(/__+/g, "_");
+
+    const upper = cleaned.toUpperCase();
+    const colourUpper = String(colourValue || "").toUpperCase();
+
+    if (upper.includes(colourUpper + "_")) {
+      return upper.substring(upper.indexOf(colourUpper + "_"));
+    }
+
+    if (upper.startsWith(colourUpper)) {
+      return upper;
+    }
+
+    return upper;
+  }
+
+  function makeNiceLabelFromComboKey(comboKey) {
+    if (!comboKey) {
+      return "Rim Set";
+    }
+
+    return comboKey
+      .split(/[-_]+/)
+      .filter(function (part) {
+        return part.trim() !== "";
+      })
+      .map(function (part) {
+        const lower = part.toLowerCase();
+        return lower.charAt(0).toUpperCase() + lower.slice(1);
+      })
+      .join(" / ");
+  }
+
+  function buildProductsByCombo(rows, colourValue) {
+    const productsByCombo = {};
+
+    rows.forEach(function (row) {
+      const localFilename = String(row["Local Filename"] || "").trim();
+      const imageUrl = normaliseImageUrl(row, colourValue);
+
+      if (!localFilename || !imageUrl) {
+        return;
+      }
+
+      const comboKey = getComboKeyFromFilename(localFilename, colourValue);
+
+      if (!comboKey) {
+        return;
+      }
+
+      if (!productsByCombo[comboKey]) {
+        productsByCombo[comboKey] = {
+          sku: comboKey,
+          title: makeNiceLabelFromComboKey(comboKey),
+          images: []
+        };
+      }
+
+      const alreadyExists = productsByCombo[comboKey].images.some(function (image) {
+        return image.url === imageUrl;
+      });
+
+      if (alreadyExists) {
+        return;
+      }
+
+      productsByCombo[comboKey].images.push({
+        url: imageUrl,
+        filename: localFilename,
+        type: getImageTypeFromFilename(localFilename)
+      });
+    });
+
+    Object.keys(productsByCombo).forEach(function (key) {
+      productsByCombo[key].images.sort(function (a, b) {
+        const typeDifference = getImageSortWeight(a.type) - getImageSortWeight(b.type);
+
+        if (typeDifference !== 0) {
+          return typeDifference;
+        }
+
+        return a.filename.localeCompare(b.filename);
+      });
+    });
+
+    return productsByCombo;
+  }
+
+  function getThumbnailImage(product) {
+    if (!product || !product.images || !product.images.length) {
+      return null;
+    }
+
+    return product.images[0];
+  }
+
+  function makeCardDescription(product) {
+    if (!product || !product.images) {
+      return "";
+    }
+
+    if (product.images.length === 1) {
+      return "1 image available";
+    }
+
+    return product.images.length + " images available";
+  }
+
+  function buildRimCard(product) {
+    const thumbnail = getThumbnailImage(product);
+
+    if (!thumbnail) {
+      return null;
+    }
+
     const card = document.createElement("div");
     card.className = "product-card";
 
     const link = document.createElement("a");
     link.href = "#";
     link.className = "product-image-link";
-    link.dataset.large = imageSrc;
-    link.dataset.title = colourName + " Rim";
-    link.dataset.description = "Gallery image " + imageNumber;
-    link.dataset.price = "";
+    link.dataset.sku = product.sku;
+    link.dataset.title = product.title;
+    link.dataset.description = makeCardDescription(product);
 
     const img = document.createElement("img");
-    img.src = imageSrc;
-    img.alt = colourName + " Rim image " + imageNumber;
+    img.src = thumbnail.url;
+    img.alt = product.title;
 
     const heading = document.createElement("h2");
-    heading.textContent = colourName + " Rim";
+    heading.textContent = product.title;
 
     const description = document.createElement("p");
-    description.textContent = "Gallery image " + imageNumber;
+    description.textContent = makeCardDescription(product);
 
     link.appendChild(img);
     card.appendChild(link);
@@ -412,22 +624,27 @@ document.addEventListener("DOMContentLoaded", function () {
     return card;
   }
 
-  function renderRimGallery(images, colourValue) {
+  function renderRimGallery(productsByCombo) {
     if (!rimGallery) {
       return;
     }
 
     clearRimGallery();
 
-    const colourName = makeNiceColourName(colourValue);
+    const productList = Object.values(productsByCombo).sort(function (a, b) {
+      return a.title.localeCompare(b.title);
+    });
 
-    images.forEach(function (imageSrc, index) {
-      const card = buildRimCard(imageSrc, colourName, index + 1);
-      rimGallery.appendChild(card);
+    productList.forEach(function (product) {
+      const card = buildRimCard(product);
+
+      if (card) {
+        rimGallery.appendChild(card);
+      }
     });
   }
 
-  async function loadRimImagesForColour(colourValue) {
+  async function loadRimProductsForColour(colourValue) {
     if (rimCache[colourValue]) {
       return rimCache[colourValue];
     }
@@ -445,10 +662,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     const csvText = await response.text();
-    const images = extractImagesFromCsvText(csvText);
+    const rows = parseCsvToRows(csvText);
+    const productsByCombo = buildProductsByCombo(rows, colourValue);
 
-    rimCache[colourValue] = images;
-    return images;
+    rimCache[colourValue] = productsByCombo;
+    return productsByCombo;
   }
 
   async function handleRimColourChange() {
@@ -459,31 +677,72 @@ document.addEventListener("DOMContentLoaded", function () {
     const selectedColour = rimColourSelect.value;
 
     clearRimGallery();
+    currentRimProducts = {};
 
     if (!selectedColour) {
-      setRimStatus("Select a rim colour to view available images.");
+      setRimStatus("Select a rim colour to view available products.");
       return;
     }
 
-    setRimStatus("Loading " + selectedColour + " rim images...");
+    setRimStatus("Loading " + selectedColour + " rim products...");
 
     try {
-      const images = await loadRimImagesForColour(selectedColour);
+      const productsByCombo = await loadRimProductsForColour(selectedColour);
+      const productCount = Object.keys(productsByCombo).length;
 
-      if (!images.length) {
-        setRimStatus("No images found for " + selectedColour + " rims.");
+      if (!productCount) {
+        setRimStatus("No products found for " + selectedColour + " rims.");
         return;
       }
 
-      renderRimGallery(images, selectedColour);
-      setRimStatus(images.length + " image(s) loaded for " + selectedColour + " rims.");
+      currentRimProducts = productsByCombo;
+      renderRimGallery(productsByCombo);
+
+      if (productCount === 1) {
+        setRimStatus("1 product loaded for " + selectedColour + " rims.");
+      } else {
+        setRimStatus(productCount + " products loaded for " + selectedColour + " rims.");
+      }
     } catch (error) {
       console.error(error);
-      setRimStatus("Could not load rim images. Check your CSV file path in script.js.");
+      setRimStatus("Could not load rim products. Check the CSV and image paths in script.js.");
     }
   }
 
   if (rimColourSelect && rimStatus && rimGallery) {
     rimColourSelect.addEventListener("change", handleRimColourChange);
   }
+
+  // ---------------------------------------
+  // Shared click handling
+  // ---------------------------------------
+  document.addEventListener("click", function (e) {
+    const link = e.target.closest(".product-image-link");
+
+    if (!link) {
+      return;
+    }
+
+    e.preventDefault();
+
+    const sku = link.dataset.sku;
+
+    if (sku) {
+      const product = currentRimProducts[sku];
+
+      if (!product || !product.images || !product.images.length) {
+        return;
+      }
+
+      openDynamicModal(0, product.images, product.title, makeCardDescription(product));
+      return;
+    }
+
+    const galleryLinks = getGalleryLinksForLink(link);
+    const index = galleryLinks.indexOf(link);
+
+    if (index !== -1) {
+      openStaticModal(index, galleryLinks);
+    }
+  });
 });
