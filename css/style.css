@@ -279,6 +279,51 @@ html {
     }
 }
 
+.product-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 1.5rem;
+    align-items: flex-end;
+    margin: 1rem 0 0.5rem;
+}
+
+.product-filters .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-width: 10rem;
+}
+
+.product-filters .filter-group label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--heading-color, #333);
+}
+
+body.dark-theme .product-filters .filter-group label {
+    color: var(--heading-color, #e0e0e0);
+}
+
+.product-filters select {
+    font-family: inherit;
+    font-size: 0.95rem;
+    padding: 0.45rem 0.6rem;
+    border-radius: 0.35rem;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    background: var(--card-bg, #fff);
+    color: var(--text-color, #222);
+    max-width: 100%;
+}
+
+body.dark-theme .product-filters select {
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+.product-filters select:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
 .product-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));

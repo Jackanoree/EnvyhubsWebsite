@@ -173,18 +173,30 @@
       <section class="product-category" id="rims-section">
         <h2>Rims</h2>
         <p class="section-intro">
-          Browse rim colours below. This section is set up to load product images from your Envy image mapping data.
+          Choose a rim line, then narrow by hub and spoke colours from your CSV data.
         </p>
 
-        <div class="product-filters">
+        <div class="product-filters product-filters--rims">
           <div class="filter-group">
-            <label for="rimColour">Rim colour</label>
+            <label for="rimColour">Rim line</label>
             <select id="rimColour" name="rimColour">
               <option value="">Choose a colour</option>
               <option value="black">Black</option>
               <option value="blue">Blue</option>
               <option value="gold">Gold</option>
               <option value="silver">Silver</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="rimHubFilter">Hub colour</label>
+            <select id="rimHubFilter" name="rimHubFilter" disabled aria-disabled="true">
+              <option value="">All hub colours</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="rimSpokeFilter">Spoke colour</label>
+            <select id="rimSpokeFilter" name="rimSpokeFilter" disabled aria-disabled="true">
+              <option value="">All spoke colours</option>
             </select>
           </div>
         </div>

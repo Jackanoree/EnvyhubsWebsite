@@ -1,0 +1,22 @@
+DONE 1. New column with this formula to extract hub colour:
+=TRIM(TEXTBEFORE(TEXTAFTER(SUBSTITUTE(SUBSTITUTE(B2," /","/"),"/ ","/"),"Rim/"),"Hub"))
+
+OR
+
+=TEXTBEFORE(TEXTAFTER(B2,"/",-1)," Wheel Set")
+
+OR
+
+=TEXTAFTER(B2,"-",-1)
+
+
+2. Change name of image heading to 
+Image variant
+
+3. Check colour names for:
+Factory
+Mag
+Titan
+
+4. Add prices to CSVs
+

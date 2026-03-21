@@ -1,6 +1,4 @@
 document.addEventListener("DOMContentLoaded", function () {
-  console.log("JavaScript loaded");
-
   // ---------------------------------------
   // Set dynamic footer year
   // ---------------------------------------
@@ -83,6 +81,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let currentDynamicIndex = -1;
   let currentDynamicTitle = "";
   let currentDynamicDescription = "";
+  let currentDynamicPrice = "";
   let currentModalMode = "";
 
   function openStaticModal(index, galleryLinks) {
@@ -120,7 +119,7 @@ document.addEventListener("DOMContentLoaded", function () {
     currentDynamicIndex = -1;
   }
 
-  function openDynamicModal(imageIndex, images, title, description) {
+  function openDynamicModal(imageIndex, images, title, description, priceText) {
     if (!images || !images[imageIndex]) {
       return;
     }
@@ -145,7 +144,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     if (priceBox) {
-      priceBox.textContent = "";
+      priceBox.textContent = priceText || "";
     }
 
     currentModalMode = "dynamic";
@@ -153,6 +152,7 @@ document.addEventListener("DOMContentLoaded", function () {
     currentDynamicIndex = imageIndex;
     currentDynamicTitle = title || "";
     currentDynamicDescription = description || "";
+    currentDynamicPrice = priceText || "";
     currentStaticLinks = [];
     currentStaticIndex = -1;
   }
@@ -184,6 +184,7 @@ document.addEventListener("DOMContentLoaded", function () {
     currentDynamicIndex = -1;
     currentDynamicTitle = "";
     currentDynamicDescription = "";
+    currentDynamicPrice = "";
     currentModalMode = "";
   }
 
@@ -201,7 +202,8 @@ document.addEventListener("DOMContentLoaded", function () {
           currentDynamicIndex - 1,
           currentDynamicImages,
           currentDynamicTitle,
-          currentDynamicDescription
+          currentDynamicDescription,
+          currentDynamicPrice
         );
       }
     }
@@ -221,7 +223,8 @@ document.addEventListener("DOMContentLoaded", function () {
           currentDynamicIndex + 1,
           currentDynamicImages,
           currentDynamicTitle,
-          currentDynamicDescription
+          currentDynamicDescription,
+          currentDynamicPrice
         );
       }
     }
@@ -333,14 +336,16 @@ document.addEventListener("DOMContentLoaded", function () {
   // Rims: CSV-driven product cards grouped by image set
   // ---------------------------------------
   const rimColourSelect = document.getElementById("rimColour");
+  const rimHubFilter = document.getElementById("rimHubFilter");
+  const rimSpokeFilter = document.getElementById("rimSpokeFilter");
   const rimStatus = document.getElementById("rimStatus");
   const rimGallery = document.getElementById("rimGallery");
 
   const rimCsvFiles = {
-    black: "data/products/black_rims_image_mapping.csv",
-    blue: "data/products/blue_rims_image_mapping.csv",
-    gold: "data/products/gold_rims_image_mapping.csv",
-    silver: "data/products/silver_rims_image_mapping.csv"
+    black: "data/products/sorted/black_rims_image_mapping.csv",
+    blue: "data/products/sorted/blue_rims_image_mapping.csv",
+    gold: "data/products/sorted/gold_rims_image_mapping.csv",
+    silver: "data/products/sorted/silver_rims_image_mapping.csv"
   };
 
   const rimImageFolders = {
@@ -514,6 +519,20 @@ document.addEventListener("DOMContentLoaded", function () {
       .join(" / ");
   }
 
+  function formatPriceLabel(raw) {
+    const s = String(raw || "").trim();
+    if (!s) {
+      return "";
+    }
+
+    const n = Number(s);
+    if (!Number.isNaN(n) && Number.isFinite(n)) {
+      return "£" + n.toFixed(2);
+    }
+
+    return s;
+  }
+
   function buildProductsByCombo(rows, colourValue) {
     const productsByCombo = {};
 
@@ -535,7 +554,11 @@ document.addEventListener("DOMContentLoaded", function () {
         productsByCombo[comboKey] = {
           sku: comboKey,
           title: makeNiceLabelFromComboKey(comboKey),
-          images: []
+          images: [],
+          hubColour: String(row["Hub colour"] || "").trim(),
+          spokeColour: String(row["Spoke colour"] || "").trim(),
+          rimColourLabel: String(row["Rim colour"] || "").trim(),
+          priceRaw: String(row["Price"] || "").trim()
         };
       }
 
@@ -582,11 +605,30 @@ document.addEventListener("DOMContentLoaded", function () {
       return "";
     }
 
-    if (product.images.length === 1) {
-      return "1 image available";
+    let line =
+      product.images.length === 1 ? "1 image available" : product.images.length + " images available";
+
+    const parts = [];
+
+    if (product.hubColour) {
+      parts.push("Hub: " + product.hubColour);
     }
 
-    return product.images.length + " images available";
+    if (product.spokeColour) {
+      parts.push("Spokes: " + product.spokeColour);
+    }
+
+    const priceLabel = formatPriceLabel(product.priceRaw);
+
+    if (priceLabel) {
+      parts.push(priceLabel);
+    }
+
+    if (parts.length) {
+      line += " · " + parts.join(" · ");
+    }
+
+    return line;
   }
 
   function buildRimCard(product) {
@@ -605,6 +647,7 @@ document.addEventListener("DOMContentLoaded", function () {
     link.dataset.sku = product.sku;
     link.dataset.title = product.title;
     link.dataset.description = makeCardDescription(product);
+    link.dataset.price = formatPriceLabel(product.priceRaw);
 
     const img = document.createElement("img");
     img.src = thumbnail.url;
@@ -644,6 +687,129 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  function collectUniqueFacetValues(productsByCombo, field) {
+    const seen = {};
+
+    Object.keys(productsByCombo).forEach(function (key) {
+      const value = String(productsByCombo[key][field] || "").trim();
+
+      if (value) {
+        seen[value] = true;
+      }
+    });
+
+    return Object.keys(seen).sort(function (a, b) {
+      return a.localeCompare(b, undefined, { sensitivity: "base" });
+    });
+  }
+
+  function resetFacetSelect(selectEl, placeholderText) {
+    if (!selectEl) {
+      return;
+    }
+
+    selectEl.innerHTML = "";
+    const opt = document.createElement("option");
+    opt.value = "";
+    opt.textContent = placeholderText;
+    selectEl.appendChild(opt);
+  }
+
+  function populateRimFacetSelects(productsByCombo) {
+    if (!rimHubFilter || !rimSpokeFilter) {
+      return;
+    }
+
+    const hubs = collectUniqueFacetValues(productsByCombo, "hubColour");
+    const spokes = collectUniqueFacetValues(productsByCombo, "spokeColour");
+
+    resetFacetSelect(rimHubFilter, "All hub colours");
+    hubs.forEach(function (value) {
+      const o = document.createElement("option");
+      o.value = value;
+      o.textContent = value;
+      rimHubFilter.appendChild(o);
+    });
+
+    resetFacetSelect(rimSpokeFilter, "All spoke colours");
+    spokes.forEach(function (value) {
+      const o = document.createElement("option");
+      o.value = value;
+      o.textContent = value;
+      rimSpokeFilter.appendChild(o);
+    });
+
+    rimHubFilter.disabled = hubs.length === 0;
+    rimSpokeFilter.disabled = spokes.length === 0;
+    rimHubFilter.setAttribute("aria-disabled", rimHubFilter.disabled ? "true" : "false");
+    rimSpokeFilter.setAttribute("aria-disabled", rimSpokeFilter.disabled ? "true" : "false");
+  }
+
+  function filterRimProductsByFacets(productsByCombo, hubValue, spokeValue) {
+    const filtered = {};
+
+    Object.keys(productsByCombo).forEach(function (key) {
+      const product = productsByCombo[key];
+
+      if (hubValue && product.hubColour !== hubValue) {
+        return;
+      }
+
+      if (spokeValue && product.spokeColour !== spokeValue) {
+        return;
+      }
+
+      filtered[key] = product;
+    });
+
+    return filtered;
+  }
+
+  function updateRimGalleryView() {
+    const colourValue = rimColourSelect ? rimColourSelect.value : "";
+    const total = Object.keys(currentRimProducts).length;
+
+    if (!total || !colourValue) {
+      return;
+    }
+
+    const hubValue = rimHubFilter ? rimHubFilter.value : "";
+    const spokeValue = rimSpokeFilter ? rimSpokeFilter.value : "";
+    const filtered = filterRimProductsByFacets(currentRimProducts, hubValue, spokeValue);
+    const shown = Object.keys(filtered).length;
+
+    renderRimGallery(filtered);
+
+    if (!shown) {
+      setRimStatus("No products match the selected filters.");
+      return;
+    }
+
+    if (shown === total && !hubValue && !spokeValue) {
+      if (shown === 1) {
+        setRimStatus("1 product loaded for " + colourValue + " rims.");
+      } else {
+        setRimStatus(shown + " products loaded for " + colourValue + " rims.");
+      }
+    } else {
+      setRimStatus("Showing " + shown + " of " + total + " products.");
+    }
+  }
+
+  function disableRimSubfilters() {
+    if (rimHubFilter) {
+      resetFacetSelect(rimHubFilter, "All hub colours");
+      rimHubFilter.disabled = true;
+      rimHubFilter.setAttribute("aria-disabled", "true");
+    }
+
+    if (rimSpokeFilter) {
+      resetFacetSelect(rimSpokeFilter, "All spoke colours");
+      rimSpokeFilter.disabled = true;
+      rimSpokeFilter.setAttribute("aria-disabled", "true");
+    }
+  }
+
   async function loadRimProductsForColour(colourValue) {
     if (rimCache[colourValue]) {
       return rimCache[colourValue];
@@ -678,6 +844,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     clearRimGallery();
     currentRimProducts = {};
+    disableRimSubfilters();
 
     if (!selectedColour) {
       setRimStatus("Select a rim colour to view available products.");
@@ -696,21 +863,30 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       currentRimProducts = productsByCombo;
-      renderRimGallery(productsByCombo);
-
-      if (productCount === 1) {
-        setRimStatus("1 product loaded for " + selectedColour + " rims.");
-      } else {
-        setRimStatus(productCount + " products loaded for " + selectedColour + " rims.");
-      }
+      populateRimFacetSelects(productsByCombo);
+      updateRimGalleryView();
     } catch (error) {
       console.error(error);
-      setRimStatus("Could not load rim products. Check the CSV and image paths in script.js.");
+      if (window.location.protocol === "file:") {
+        setRimStatus(
+          "Rim CSVs can't load when you open this page as a file (file://). Run a local server from the project folder, e.g. PowerShell: python -m http.server 8000 — then open http://localhost:8000/products.html"
+        );
+      } else {
+        setRimStatus("Could not load rim products. Check the CSV and image paths in script.js.");
+      }
     }
   }
 
   if (rimColourSelect && rimStatus && rimGallery) {
     rimColourSelect.addEventListener("change", handleRimColourChange);
+
+    if (rimHubFilter) {
+      rimHubFilter.addEventListener("change", updateRimGalleryView);
+    }
+
+    if (rimSpokeFilter) {
+      rimSpokeFilter.addEventListener("change", updateRimGalleryView);
+    }
   }
 
   // ---------------------------------------
@@ -734,7 +910,13 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
-      openDynamicModal(0, product.images, product.title, makeCardDescription(product));
+      openDynamicModal(
+        0,
+        product.images,
+        product.title,
+        makeCardDescription(product),
+        formatPriceLabel(product.priceRaw)
+      );
       return;
     }
 
