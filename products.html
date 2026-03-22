@@ -27,8 +27,10 @@
     <ul class="nav-list">
       <li><a href="index.html">Home</a></li>
       <li><a href="about.html">About</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
       <li><a href="products.html">Products</a></li>
       <li><a href="contact.html">Contact</a></li>
+      <li><a href="#" data-open-basket>Basket (<span id="basketCountBadge">0</span>)</a></li>
     </ul>
 
     <label class="theme-switch" aria-label="Toggle theme">
@@ -73,102 +75,6 @@
   <main>
     <section>
       <h1>Our Product Range</h1>
-
-      <!-- Complete Wheel Sets -->
-      <section class="product-category">
-        <h2>Complete Wheel Sets</h2>
-        <div class="product-grid">
-          <div class="product-card">
-            <a href="#" class="product-image-link"
-              data-large="images/product-page/envy-built-wheels.jpg"
-              data-title="Built Wheels"
-              data-description="Pre-built with your hub of choice, ready to ride straight out of the box."
-              data-price="£299.99">
-              <img src="images/product-page/envy-built-wheels.jpg" alt="Built Wheels" />
-            </a>
-            <h2>Built Wheels</h2>
-            <p>Pre-built with your hub of choice, ready to ride straight out of the box.</p>
-            <p class="price">£299.99</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Hub Sets -->
-      <section class="product-category">
-        <h2>Hub Sets</h2>
-        <div class="product-grid single-product-wide">
-          <div class="product-card wide">
-            <a href="#" class="product-image-link"
-              data-large="images/product-page/envy-purple-hub.jpg"
-              data-title="Purple Hub"
-              data-description="Flagship anodised purple hub built into a 32-spoke rim."
-              data-price="£149.99">
-              <img src="images/product-page/envy-purple-hub.jpg" alt="Purple Hub" />
-            </a>
-            <h2>Purple Hub</h2>
-            <p>Flagship anodised purple hub built into a 32-spoke rim.</p>
-            <p class="price">£149.99</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Fork Extensions -->
-      <section class="product-category">
-        <h2>Fork Extensions</h2>
-        <div class="product-grid">
-          <div class="product-card">
-            <a href="#" class="product-image-link"
-              data-large="images/product-page/envy-fork-extension-kit.png"
-              data-title="Fork Extension Kit"
-              data-description="Retrofit kit to adapt older forks for Envy hub compatibility."
-              data-price="£39.99">
-              <img src="images/product-page/envy-fork-extension-kit.png" alt="Fork Extension Kit" />
-            </a>
-            <h2>Fork Extension Kit</h2>
-            <p>Retrofit kit to adapt older forks for Envy hub compatibility.</p>
-            <p class="price">£39.99</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Spacer / Bearing / Seal Kits -->
-      <section class="product-category">
-        <h2>Spacer / Bearing / Seal Kits</h2>
-        <div class="product-grid">
-          <div class="product-card">
-            <a href="#" class="product-image-link"
-              data-large="images/product-page/envy-rear-spacer-bearing-tube-seal-kit.jpg"
-              data-title="Spacer / Bearing Kit"
-              data-description="Includes all spacers, bearings, and seals needed for your build."
-              data-price="£49.99">
-              <img src="images/product-page/envy-rear-spacer-bearing-tube-seal-kit.jpg" alt="Bearing Kit" />
-            </a>
-            <h2>Spacer / Bearing Kit</h2>
-            <p>Includes all spacers, bearings, and seals needed for your build.</p>
-            <p class="price">£49.99</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Spoke & Nipple Sets -->
-      <section class="product-category">
-        <h2>Spoke &amp; Nipple Sets</h2>
-        <div class="product-grid">
-          <div class="product-card">
-            <a href="#" class="product-image-link"
-              data-large="images/product-page/envy-spoke-and-nipple-set.jpg"
-              data-title="Spoke & Nipple Set"
-              data-description="Matched stainless steel spokes and nipples."
-              data-price="£29.99">
-              <img src="images/product-page/envy-spoke-and-nipple-set.jpg" alt="Spoke and Nipple Set" />
-            </a>
-            <h2>Spoke &amp; Nipple Set</h2>
-            <p>Matched stainless steel spokes and nipples.</p>
-            <p class="price">£29.99</p>
-          </div>
-        </div>
-      </section>
-
       <!-- Rims -->
       <section class="product-category" id="rims-section">
         <h2>Rims</h2>
@@ -224,7 +130,23 @@
     &copy; <span id="footerYear"></span> Metrics Engineering Co Ltd
   </footer>
 
-  <script src="js/script.js?v=2" defer></script>
+  <div id="basketOverlay" class="basket-overlay"></div>
+  <aside id="basketDrawer" class="basket-drawer" aria-hidden="true">
+    <div class="basket-drawer__header">
+      <h2>Your Basket</h2>
+      <button id="closeBasketBtn" class="basket-close-btn" type="button" aria-label="Close basket">&times;</button>
+    </div>
+    <div id="cartEmptyState" class="product-status">Your basket is empty.</div>
+    <div id="cartItems" class="cart-items"></div>
+    <div class="cart-summary">
+      <p>Items: <strong id="cartCount">0</strong></p>
+      <p>Total: <strong id="cartTotal">£0.00</strong></p>
+      <button id="clearCartBtn" class="cart-clear-btn" type="button">Clear basket</button>
+      <a class="cart-checkout-btn" href="order-summary.html">Order summary</a>
+    </div>
+  </aside>
+
+  <script src="js/script.js?v=4" defer></script>
   <script>
     document.getElementById("footerYear").textContent = new Date().getFullYear();
   </script>

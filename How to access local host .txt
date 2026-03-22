@@ -1,0 +1,20 @@
+Open PowerShell (or the terminal in Cursor).
+Go to your site folder:
+Set-Location "C:\Users\jack-\OneDrive\Documents\# Coding\EnvyProject\envy-hubs-website"
+
+Start the server (use ; in PowerShell, not &&):
+python -m http.server 8000
+
+If python fails, try:
+py -m http.server 8000
+
+You should see something like: Serving HTTP on :: port 8000.
+
+In the browser open: http://localhost:8000/index.html (or http://127.0.0.1:8000/index.html).
+Leave that terminal open while you test. To stop the server: Ctrl+C in that terminal.
+
+If it still won’t connect
+Another app may be using port 8000 — try 8080 instead:
+python -m http.server 8080
+then open http://localhost:8080/index.html.
+Confirm Python is installed: python --version or py --version

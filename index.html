@@ -30,8 +30,10 @@
     <ul class="nav-list">
       <li><a href="index.html">Home</a></li>
       <li><a href="about.html">About</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
       <li><a href="products.html">Products</a></li>
       <li><a href="contact.html">Contact</a></li>
+      <li><a href="#" data-open-basket>Basket (<span id="basketCountBadge">0</span>)</a></li>
     </ul>
 <label class="theme-switch" aria-label="Toggle theme">
   <input type="checkbox" id="themeToggle" />
@@ -107,25 +109,22 @@
 
 
 
-    <section id="specs">
-      <h2>Technical Specs</h2>
-      <ul>
-        <li>Material: Billet Aluminium</li>
-        <li>Weight: 1.2kg</li>
-        <li>Fit: Universal / Custom Machined</li>
-        <li>Colour Options: 6</li>
-      </ul>
-    </section>
-
     <section id="gallery">
       <h2>Gallery</h2>
-      <div class="gallery-grid">
-        <img src="images/Carousel/envy-black-hubs-in-two-wheels.jpg" alt="Envy hub owner with happy customer">
-        <img src="images/Carousel/envy-motorcyclists-trick-in-air.jpg"
-          alt="Purple Envy hub installed in a motorbike wheel">
-        <img src="images/Carousel/envy-purple-hub-in-wheel.png" alt="Colourful vapourwave-themed Envy hub">
-        <img src="images/Carousel/envy-wheel-purple-landscape-black-bg.jpg" alt="Close-up of Envy fork extension kit">
+      <div class="gallery-grid gallery-grid--preview">
+        <a class="gallery-preview-card" href="gallery.html">
+          <img src="images/Carousel/envy-black-hubs-in-two-wheels.jpg" alt="Black Envy hubs in two wheels">
+        </a>
+        <a class="gallery-preview-card" href="gallery.html">
+          <img src="images/Carousel/envy-motorcyclists-trick-in-air.jpg" alt="Motocross rider in the air">
+        </a>
+        <a class="gallery-preview-card" href="gallery.html">
+          <img src="images/Carousel/envy-purple-hub-in-wheel.png" alt="Close-up of purple Envy hub in wheel">
+        </a>
       </div>
+      <p class="gallery-cta">
+        <a class="button button--primary" href="gallery.html">View full gallery</a>
+      </p>
     </section>
 
     <section id="testimonials">
@@ -150,6 +149,22 @@
     <a href="#top">Back to Top ↑</a>
   </div>
 
+  <div id="basketOverlay" class="basket-overlay"></div>
+  <aside id="basketDrawer" class="basket-drawer" aria-hidden="true">
+    <div class="basket-drawer__header">
+      <h2>Your Basket</h2>
+      <button id="closeBasketBtn" class="basket-close-btn" type="button" aria-label="Close basket">&times;</button>
+    </div>
+    <div id="cartEmptyState" class="product-status">Your basket is empty.</div>
+    <div id="cartItems" class="cart-items"></div>
+    <div class="cart-summary">
+      <p>Items: <strong id="cartCount">0</strong></p>
+      <p>Total: <strong id="cartTotal">£0.00</strong></p>
+      <button id="clearCartBtn" class="cart-clear-btn" type="button">Clear basket</button>
+      <a class="cart-checkout-btn" href="order-summary.html">Order summary</a>
+    </div>
+  </aside>
+
   <section class="background-slice">
     <!-- Optional: you could put a heading, quote, or CTA here -->
   </section>
@@ -158,7 +173,7 @@
     &copy; <span id="footerYear"></span> Metrics Engineering Co Ltd
   </footer>
 
-  <script src="js/script.js?v=2"></script>
+  <script src="js/script.js?v=4"></script>
 </body>
 
 </html> 

@@ -27,8 +27,10 @@
   <ul class="nav-list">
     <li><a href="index.html">Home</a></li>
     <li><a href="about.html">About</a></li>
+    <li><a href="gallery.html">Gallery</a></li>
     <li><a href="products.html">Products</a></li>
     <li><a href="contact.html">Contact</a></li>
+    <li><a href="#" data-open-basket>Basket (<span id="basketCountBadge">0</span>)</a></li>
   </ul>
 
 <label class="theme-switch" aria-label="Toggle theme">
@@ -85,6 +87,7 @@
 
     <section>
       <h2>Our Mission</h2>
+      <p>At Envy, our mission is to push the limits of wheel hub performance through precision engineering and thoughtful design. We build components that riders can trust—strong, reliable, and made to perform wherever the ride takes them.</p>
       <blockquote>
         <p>"Design with purpose. Engineer with obsession. Ride with confidence."</p>
         <footer>— The Envy Engineering Team</footer>
@@ -110,11 +113,27 @@
     <a href="#top">Back to Top ↑</a>
   </div>
 
+  <div id="basketOverlay" class="basket-overlay"></div>
+  <aside id="basketDrawer" class="basket-drawer" aria-hidden="true">
+    <div class="basket-drawer__header">
+      <h2>Your Basket</h2>
+      <button id="closeBasketBtn" class="basket-close-btn" type="button" aria-label="Close basket">&times;</button>
+    </div>
+    <div id="cartEmptyState" class="product-status">Your basket is empty.</div>
+    <div id="cartItems" class="cart-items"></div>
+    <div class="cart-summary">
+      <p>Items: <strong id="cartCount">0</strong></p>
+      <p>Total: <strong id="cartTotal">£0.00</strong></p>
+      <button id="clearCartBtn" class="cart-clear-btn" type="button">Clear basket</button>
+      <a class="cart-checkout-btn" href="order-summary.html">Order summary</a>
+    </div>
+  </aside>
+
   <footer>
     &copy; <span id="footerYear"></span> Metrics Engineering Co Ltd
   </footer>
 
-  <script src="js/script.js?v=2"></script>
+  <script src="js/script.js?v=4"></script>
   <script>
     document.getElementById("footerYear").textContent = new Date().getFullYear();
   </script>

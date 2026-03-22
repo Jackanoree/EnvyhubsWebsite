@@ -13,10 +13,16 @@ OR
 2. Change name of image heading to 
 Image variant
 
-3. Check colour names for:
-Factory
-Mag
-Titan
+4. Correct pricing for products
 
-4. Add prices to CSVs
+5. Figure out in the CSVs where these are referenced:
+Adventure wheels
+Flat track wheels
+MX / Enduro wheels
+MX - Junior wheels
+Supermoto wheels
 
+6. What's the desired domain name? 
+envyhubs.co.uk is already used to redirect to https://www.metricsengineering.co.uk/envy-wheel-hubs/
+
+7. Is it PREDOMINANTLY Envy wheel hubs / Envy wheel sets / Envy wheels ? 
