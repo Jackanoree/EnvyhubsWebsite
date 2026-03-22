@@ -295,6 +295,15 @@ body>footer {
     color: var(--heading-color);
 }
 
+/* Netlify honeypot — hidden from users, catches simple bots */
+.netlify-honeypot-field {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
 #testimonials {
     background-color: var(--card-bg);
     padding: 2rem 1rem;

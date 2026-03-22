@@ -98,16 +98,19 @@
 
         <div class="contact-page__form">
           <h2>Send Us a Message</h2>
-          <!--
-            Emails from this form: sign up at https://formspree.io (free tier),
-            create a form, copy its endpoint (e.g. https://formspree.io/f/xyzabc),
-            and paste it as the action URL below (replace YOUR_FORMSPREE_ID).
-          -->
+          <!-- Netlify Forms only (no Formspree). After deploy: Netlify → Forms + Notifications for email. -->
           <form
-            action="https://formspree.io/f/YOUR_FORMSPREE_ID"
+            name="contact"
             method="POST"
+            data-netlify="true"
+            netlify-honeypot="bot-field"
+            action="/thank-you.html"
           >
-            <input type="hidden" name="_subject" value="Envy Hubs website enquiry" />
+            <p class="netlify-honeypot-field" aria-hidden="true">
+              <label for="website">Leave this empty</label>
+              <input type="text" id="website" name="bot-field" tabindex="-1" autocomplete="off" />
+            </p>
+
             <label for="name">Your name</label>
             <input type="text" id="name" name="name" required autocomplete="name" />
 
@@ -152,7 +155,7 @@
     &copy; <span id="footerYear"></span> Metrics Engineering Co Ltd
   </footer>
 
-  <script src="js/script.js?v=4" defer></script>
+  <script src="js/script.js?v=5" defer></script>
   <script>
     document.getElementById("footerYear").textContent = new Date().getFullYear();
   </script>

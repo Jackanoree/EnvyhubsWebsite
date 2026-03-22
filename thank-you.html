@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Message sent | Envy Wheel Hubs</title>
+  <link rel="icon" href="images/Logo and branding/envy-favicon.jpg" />
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+  <a id="top"></a>
+
+  <nav class="site-nav">
+    <input type="checkbox" id="menu-toggle" class="menu-toggle" />
+    <label for="menu-toggle" class="burger">&#9776;</label>
+
+    <ul class="nav-list">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="products.html">Products</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="#" data-open-basket>Basket (<span id="basketCountBadge">0</span>)</a></li>
+    </ul>
+
+    <label class="theme-switch" aria-label="Toggle theme">
+      <input type="checkbox" id="themeToggle" />
+      <span class="slider">
+        <span class="slider-icon sun" aria-hidden="true"></span>
+        <span class="slider-icon moon" aria-hidden="true"></span>
+      </span>
+    </label>
+  </nav>
+
+  <header class="site-header">
+    <img src="images/Logo and branding/envy-by-metrics-logo.png" alt="Envy by Metrics Logo" class="logo" />
+  </header>
+
+  <main class="contact-page">
+    <section class="contact-page__intro">
+      <h1 class="section-title">Thank you</h1>
+      <p>Your message has been sent. We’ll get back to you as soon as we can.</p>
+      <p><a class="button button--primary" href="index.html">Back to home</a></p>
+    </section>
+  </main>
+
+  <div id="basketOverlay" class="basket-overlay"></div>
+  <aside id="basketDrawer" class="basket-drawer" aria-hidden="true">
+    <div class="basket-drawer__header">
+      <h2>Your Basket</h2>
+      <button id="closeBasketBtn" class="basket-close-btn" type="button" aria-label="Close basket">&times;</button>
+    </div>
+    <div id="cartEmptyState" class="product-status">Your basket is empty.</div>
+    <div id="cartItems" class="cart-items"></div>
+    <div class="cart-summary">
+      <p>Items: <strong id="cartCount">0</strong></p>
+      <p>Total: <strong id="cartTotal">£0.00</strong></p>
+      <button id="clearCartBtn" class="cart-clear-btn" type="button">Clear basket</button>
+      <a class="cart-checkout-btn" href="order-summary.html">Order summary</a>
+    </div>
+  </aside>
+
+  <footer>
+    &copy; <span id="footerYear"></span> Metrics Engineering Co Ltd
+  </footer>
+
+  <script src="js/script.js?v=4" defer></script>
+  <script>
+    document.getElementById("footerYear").textContent = new Date().getFullYear();
+  </script>
+</body>
+
+</html>
