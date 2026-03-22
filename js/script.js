@@ -18,51 +18,6 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // ---------------------------------------
-  // Hero typewriter effect
-  // ---------------------------------------
-  const phrases = [
-    '"I literally tell everyone they are the raddest parts on my bike."',
-    '"Built for the ride of your life."'
-  ];
-
-  const target = document.getElementById("typewriter");
-
-  if (target) {
-    let phraseIndex = 0;
-    let charIndex = 0;
-    let typing = true;
-
-    function typeLoop() {
-      const currentPhrase = phrases[phraseIndex];
-
-      if (typing) {
-        if (charIndex <= currentPhrase.length) {
-          target.textContent = currentPhrase.slice(0, charIndex);
-          charIndex++;
-          setTimeout(typeLoop, 20);
-        } else {
-          typing = false;
-          setTimeout(typeLoop, 1500);
-        }
-      } else {
-        if (charIndex > 1) {
-          target.textContent = currentPhrase.slice(0, charIndex);
-          charIndex--;
-          setTimeout(typeLoop, 20);
-        } else {
-          target.textContent = "";
-          charIndex = 0;
-          typing = true;
-          phraseIndex = (phraseIndex + 1) % phrases.length;
-          setTimeout(typeLoop, 600);
-        }
-      }
-    }
-
-    typeLoop();
-  }
-
-  // ---------------------------------------
   // Modal Logic
   // ---------------------------------------
   const modal = document.getElementById("image-modal");
